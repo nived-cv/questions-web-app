@@ -1,7 +1,4 @@
 
-
-
-
 export let classObj = {
     "name" : "class A" ,
     "teacherName" : "Mary" ,
@@ -806,7 +803,7 @@ export const studentsScoringAboveAverage = () =>{
     let result = []
 
     students.forEach(student => {
-        studentTotal = student.marks.reduce((total,value) => total += value.mark , 0)
+        let studentTotal = student.marks.reduce((total,value) => total += value.mark , 0)
         studentTotal > classAverage && result.push(student.name)
     })
 
@@ -818,7 +815,7 @@ export const studentsScoringBelowAverage = () =>{
     let result = []
 
     students.forEach(student => {
-        studentTotal = student.marks.reduce((total,value) => total += value.mark , 0)
+        let studentTotal = student.marks.reduce((total,value) => total += value.mark , 0)
         studentTotal < classAverage && result.push(student.name)
     })
 
@@ -858,7 +855,7 @@ export const subWithStudentsAbove = (mark_limit) =>{
     setPercentage[key] = percentageOfStudentsAbove(key,mark_limit)
 
     let max_value = Math.max(...Object.values(setPercentage))
-    for( key in setPercentage)
+    for(let key in setPercentage)
     setPercentage[key] == max_value && result.push("\nhighest percentage of students in ",key)
 
     return result
@@ -873,7 +870,7 @@ export const subWithStudentsBelow = (mark_limit) =>{
     setPercentage[key] = percentageOfStudentsBelow(key,mark_limit)
 
     let max_value = Math.max(...Object.values(setPercentage))
-    for( key in setPercentage)
+    for(let key in setPercentage)
     setPercentage[key] == max_value && result.push("\nhighest percentage of students in ",key)
 
     return result
@@ -887,7 +884,7 @@ export const leastSubWithStudentsAbove = (mark_limit) =>{
     for(let key in setPercentage)
     setPercentage[key] = percentageOfStudentsAbove(key,mark_limit)
 
-    min_value = Math.min(...Object.values(setPercentage))
+    let min_value = Math.min(...Object.values(setPercentage))
     for(let key in setPercentage)
     setPercentage[key] == min_value && result.push("\nlowest percentage of students in ",key)
 
@@ -902,7 +899,7 @@ export const leastSubWithStudentsBelow = (mark_limit) =>{
     for(let key in setPercentage)
     setPercentage[key] = percentageOfStudentsBelow(key,mark_limit)
 
-    min_value = Math.min(...Object.values(setPercentage))
+    let min_value = Math.min(...Object.values(setPercentage))
     for(let key in setPercentage)
     setPercentage[key] == min_value && result.push("\nlowest percentage of students in ",key)
 
@@ -917,8 +914,9 @@ export const percentOfStudentsAboveAverage = () => {
     let percent = 0;
 
     for(let key in setCount){
-        temp_value = percentageOfStudentsAbove(key,classAverage) 
-        temp_value > percent ? percent = temp_value : ''
+        let temp_value = percentageOfStudentsAbove(key,classAverage) 
+        if(temp_value > percent)
+        percent = temp_value
     }
 
     return("\n percent of students scoring above average in atleats 1 ",percent)
@@ -931,8 +929,9 @@ export const percentOfStudentsBelowAverage = () => {
     let percent = 0;
 
     for(let key in setCount){
-        temp_value = percentageOfStudentsBelow(key,classAverage) 
-        temp_value > percent ? percent = temp_value : ''
+        let temp_value = percentageOfStudentsBelow(key,classAverage) 
+        if(temp_value > percent)
+        percent = temp_value
     }
 
     return (percent)
@@ -942,12 +941,14 @@ export const studentsAveragingAboveInMost = () =>{
 
     let majority_factor = students[0].marks.length / 2
     let averageMark = averageofClass()
+    let result = []
 
     students.forEach((student) => {
         
-        res_array = student.marks.filter((detail) => detail.mark >= averageMark)
+        let res_array = student.marks.filter((detail) => detail.mark >= averageMark)
         res_array.length >= majority_factor && result.push(student.name)
     })
+    return result
 }
 
 export const studentsAveragingBelowInMost = () =>{
@@ -958,9 +959,10 @@ export const studentsAveragingBelowInMost = () =>{
 
     students.forEach((student) => {
         
-        res_array = student.marks.filter((detail) => detail.mark <= averageMark)
+        let res_array = student.marks.filter((detail) => detail.mark <= averageMark)
         res_array.length >= majority_factor && result.push(student.name)
     })
+    return result
 }
 
 
@@ -1019,14 +1021,23 @@ export let easyQuestions =  [
     {"question" : "question2" , "answer" : totalMarkOfSubs()},
     {"question" : "question2" , "answer" : toppersOfSubs()},
     {"question" : "question2" , "answer" : lowersOfSubs()},
-    {"question" : "question2" , "answer" : toppersByAvg()},
-    {"question" : "question2" , "answer" : lowersByAvg()},
-    {"question" : "question2" , "answer" : toppers()},
-    {"question" : "question2" , "answer" : lowers()},
+    {"question" : "question2" , "answer" : subjectsWithHighestScores()},
+    {"question" : "question2" , "answer" : subjectsWithLowestScores()},
+    {"question" : "question2" , "answer" : studentsScoringAboveAverage()},
+    {"question" : "question2" , "answer" : studentsScoringBelowAverage()},
     ]
 
     export let hardQuestions = [
-    {"question" : "print class name" , "answer" : printClassName()},
+    {"question" : "print class name" , "answer" : subjectsAboveAverage()},
+    {"question" : "print class name" , "answer" : subjectsBelowAverage()},
+    {"question" : "print class name" , "answer" : subWithStudentsAbove(20)},
+    {"question" : "print class name" , "answer" : subWithStudentsBelow(30)},
+    {"question" : "print class name" , "answer" : leastSubWithStudentsAbove(30)},
+    {"question" : "print class name" , "answer" : leastSubWithStudentsBelow(30)},
+    {"question" : "print class name" , "answer" : percentOfStudentsAboveAverage()},
+    {"question" : "print class name" , "answer" : percentOfStudentsBelowAverage()},
+    {"question" : "print class name" , "answer" : studentsAveragingAboveInMost()},
+    {"question" : "print class name" , "answer" : studentsAveragingBelowInMost()},
 ]
 
 export let toughQuestions = [
