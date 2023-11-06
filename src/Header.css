@@ -1,0 +1,30 @@
+
+.header-container{
+    display:flex;
+    justify-content: space-around;
+    align-items:center;
+    background-color:teal;
+    color:white;
+    height:6vh;
+}
+
+.right-items{
+    display:flex;
+    column-gap:5vw;
+
+}
+
+.left-items{
+    display:flex;
+    justify-content:space-between;
+}
+
+.btn{
+    cursor:pointer;
+    padding:5px;
+}
+
+.btn:hover{
+    background-color:white;
+    color:teal;
+}
