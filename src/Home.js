@@ -9,10 +9,10 @@ const Home = ({changeMode}) => {
     <div className = "home">
         
         <div className = "select-type">
-          <div className = "option" onClick = {changeMode}>Easy</div>
-          <div className = "option" onClick = {changeMode}>Medium</div>
-          <div className = "option" onClick = {changeMode}>Hard</div>
-          <div className = "option" onClick = {changeMode}>Tough</div>
+          <div className = "option" onClick = {changeMode} id = "Easy">Easy</div>
+          <div className = "option" onClick = {changeMode} id = "Medium">Medium</div>
+          <div className = "option" onClick = {changeMode} id = "Hard">Hard</div>
+          <div className = "option" onClick = {changeMode} id = "Tough">Tough</div>
         </div>
     </div>
   )

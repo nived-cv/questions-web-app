@@ -7,15 +7,15 @@ const ContentScreen = ({page,setPage}) => {
 
     let [level,setLevel] = useState("Easy")
 
-    const sayhi = (e) =>{
-        let value = e.target.innerText
+    const changeMode = (e) =>{
+        let value = e.target.id
         setLevel(value)
         setPage("Questions")
     }
 
         switch(page){
 
-            case 'Home' : return <Home className = "screens" changeMode = {sayhi}/>
+            case 'Home' : return <Home className = "screens" changeMode = {changeMode}/>
             case 'All'  : return <All />
             case 'Questions'  : return <Questions level = {level}/>
 

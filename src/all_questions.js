@@ -60,9 +60,12 @@ export const printTeachersName = ()=>{
 }
 
 export const printStudentsNames = ()=>{
+    let result = []
+
     classObj.students.forEach((student)=>{
-        return(student.name)
+        result.push(student.name)
     })
+    return result
 }
 
 export const printStudentIds = ()=>{
@@ -83,9 +86,13 @@ export const printSubjectsOfOne = (id)=>{
 
 export const printMarksOfOne = (id)=>{
     let student = classObj.students.find(student => student.id === id)
-    let result = []
-    student.marks.forEach(subjectDetails => result.push(subjectDetails.subject,subjectDetails.mark))
-    return (result.length > 0 ? result :'student not found' )
+    let result = {}
+    let temp = {}
+    student.marks.forEach(subjectDetails => {
+        temp[subjectDetails.subject] = subjectDetails.mark
+        Object.assign(result,temp)
+        })
+    return (result ? result :'student not found' )
 }
 
 export const averageMarkOfOne =(id)=>{
@@ -227,12 +234,14 @@ const fetchSubs = () =>{
 }
 
 export const totalMarkOfSubs = () =>{
+
     const aggregate = fetchSubs()
     students.forEach(student =>{
     student.marks.forEach( sub => aggregate[sub.subject] += sub.mark)
     })
-    return aggregate
+    return (aggregate ? aggregate : "no result")
 }
+
 
 export const subjectWithLowAvg = ()=>{
     const aggregate = {"English":0,"Maths":0,"Physics":0,"Chemistry":0,"Computer":0}
@@ -278,7 +287,7 @@ export const averageOfEachSub = () =>{
     for(let sub in totalMarks)
     totalMarks[sub] = totalMarks[sub] / students.length
 
-    return(totalMarks)
+    return totalMarks
 }
 
 export const topperSubject = ()=>{
@@ -578,8 +587,6 @@ export const studentsWithLowestPercentIn = (sub) =>{
 
 // med questions
 
-
-
 export const topScoresOfEachSub = () =>{
 
     let markList = fetchSubs()
@@ -646,7 +653,7 @@ export const topScorersOfEachSub = () =>{
     {
         students.forEach((student) => {
             let found = student.marks.find(details => details.mark == markList[key] && details.subject == key)
-            found && result.push({key:student.name})
+            found && result.push(student.name)
         })    
     }
     return result
@@ -661,7 +668,7 @@ export const lowScorersOfEachSub = () =>{
     {
         students.forEach((student) => {
             let found = student.marks.find(details => details.mark == markList[key] && details.subject == key)
-            found && result.push({key:student.name})
+            found && result.push(student.name)
         })    
     }
     return result
@@ -686,7 +693,7 @@ export const highestPercentageOf = (id) =>{
     for(let i = 0; i < markList.length ; i++)
     markList[i] == max_value && result.push(subjectList[i])
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const lowestPercentageOf = (id) =>{
@@ -703,7 +710,7 @@ export const lowestPercentageOf = (id) =>{
     for(let i = 0; i < markList.length ; i++)
     markList[i] == min_value && result.push(subjectList[i])
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsScoredAbove = (mark_lim) =>{
@@ -723,7 +730,7 @@ export const subjectsScoredAbove = (mark_lim) =>{
     prev_array = prev_array.filter(item => item != null)
 
     result.push(prev_array.length > 0 ? prev_array : 'no subjects')
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsScoredBelow = (mark_lim) =>{
@@ -743,7 +750,7 @@ export const subjectsScoredBelow = (mark_lim) =>{
     prev_array = prev_array.filter(item => item != null)
 
     result.push(prev_array.length > 0 ? prev_array : 'no subjects')
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const averageMarksOfSubsAbove = (mark_lim) =>{
@@ -757,7 +764,7 @@ export const averageMarksOfSubsAbove = (mark_lim) =>{
     for(let key in totalMark)
         totalMark[key] > mark_lim && result.push(key) 
 
-    return result
+        return (result.length > 0 ? result : "no result")
 }
 
 export const averageMarksOfSubsBelow = (mark_lim) =>{
@@ -771,7 +778,7 @@ export const averageMarksOfSubsBelow = (mark_lim) =>{
     for(let key in totalMark)
         totalMark[key] < mark_lim && result.push(key) 
 
-        return result
+        return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsWithHighestScores = () =>{
@@ -783,7 +790,7 @@ export const subjectsWithHighestScores = () =>{
     for(let key in markList)
     maxValue == markList[key] && result.push(key)
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsWithLowestScores = () =>{
@@ -795,7 +802,7 @@ export const subjectsWithLowestScores = () =>{
     for(let key in markList)
     minValue == markList[key] && result.push(key)
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const studentsScoringAboveAverage = () =>{
@@ -807,7 +814,7 @@ export const studentsScoringAboveAverage = () =>{
         studentTotal > classAverage && result.push(student.name)
     })
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const studentsScoringBelowAverage = () =>{
@@ -819,7 +826,7 @@ export const studentsScoringBelowAverage = () =>{
         studentTotal < classAverage && result.push(student.name)
     })
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsAboveAverage = () =>{
@@ -831,7 +838,7 @@ export const subjectsAboveAverage = () =>{
     for(let key in markList)
     markList[key] > average && result.push(key)
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subjectsBelowAverage = () =>{
@@ -843,7 +850,7 @@ export const subjectsBelowAverage = () =>{
     for(let key in markList)
     markList[key] < average && result.push(key)
 
-    return result
+    return (result.length > 0 ? result : "no result")
 }
 
 export const subWithStudentsAbove = (mark_limit) =>{
@@ -965,6 +972,372 @@ export const studentsAveragingBelowInMost = () =>{
     return result
 }
 
+// saturday
+
+export const filterStudentsByMinScore = (min_score) => {
+    let result = [];
+    students.forEach((student) => {
+        let found = student.marks.find((markDetails) => markDetails.mark < min_score)
+        //found ? '' : result.push(count)
+        found && result.push(student)
+    })
+
+    return result
+}
+
+export const filterStudentsByMaxScore = (max_score) => {
+    let result = [];
+    students.forEach((student) => {
+        let found = student.marks.find((markDetails) => markDetails.mark > max_score)
+        //found ? '' : result.push(found)
+        found && result.push(student)
+    })
+
+    return result
+}
+
+export const subjectsAveragingAboveClass = () =>{
+
+    const classAvg = averageofClass() / students[0].marks.length
+    const subs = fetchSubs()
+    let result = []
+    
+    for(let key in subs){
+        let percent = percentageOfStudentsAbove(key,classAvg)
+        percent > 50 && result.push(key) 
+    }
+    return result   
+}
+
+export const subjectsAveragingBelowClass = () =>{
+
+    const classAvg = averageofClass() / students[0].marks.length
+    const subs = fetchSubs()
+    let result = []
+    
+    for(let key in subs){
+        let percent = percentageOfStudentsBelow(key,classAvg)
+        percent > 50 && result.push(key) 
+    }
+    return(result ? result : "no result")
+}
+
+const studentsAboveStudentInAll = (id) => {
+
+    let avg = averageMarkOfOne(id)
+    let result = {}
+    result["percent"] = percentageOfStudentsAboveTotal(avg)
+    
+    return(result ? result : "no students")
+}
+
+const studentsBelowStudentInAll = (id) => {
+
+    let avg = averageMarkOfOne(id)
+    let result = {}
+    result["percent"] = percentageOfStudentsBelowTotal(avg)
+
+    return(result ? result : "no students")
+}
+
+
+const studentsAboveStudentInEach = (id) => {
+
+    const subs = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    let result = {}
+
+    for(let key in subs)
+        result[key] = percentageOfStudentsAbove(key,avg)
+    
+    return(result ? result : "no students")
+}
+
+const studentssBelowStudentInEach = (id) => {
+
+    const subs = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    let result = {}
+
+    for(let key in subs)
+        result[key] = percentageOfStudentsBelow(key,avg)
+    
+    return(result ? result : "no students")
+}
+
+export const studentsAveragingAbove = (id) =>{
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    result = filterStudentsByMinScore(avg)
+    result = result.map((item) => item.name)
+
+    return(result.length > 0 ? result : "no students")
+}
+
+export const studentsAveragingBelow = (id) =>{
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    result = filterStudentsByMaxScore(avg)
+    result = result.map((item) => item.name)
+
+    return(result.length > 0 ? result : "no students")
+}
+
+const subjectsAveragingAboveStudent = (id) => {
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    let subjectList = averageOfEachSub()
+
+    for(let sub in subjectList)
+    subjectList[sub] > avg && result.push(sub)
+
+    return (result.length > 0 ? result : "no result")
+}
+
+const subjectsAveragingBelowStudent = (id) => {
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    let subjectList = averageOfEachSub()
+
+    for(let sub in subjectList)
+    subjectList[sub] < avg && result.push(sub)
+
+    return (result.length > 0 ? result : "no result")
+}
+
+export const subjectsMaxPercentStudentsAboveStudent = (id) =>{
+
+    let result = []
+    let percentList = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    
+    for(let key in percentList)
+    percentList[key] = percentageOfStudentsAbove(key,avg)
+
+    let percentValues = Object.values(percentList)
+    let subjects = Object.keys(percentList)
+    let max_value = Math.max(...percentValues)
+
+    for(let i =0; i < subjects.length ; i++)
+    max_value == percentValues[i] && result.push(subjects[i])
+
+    return result
+}
+
+export const subjectsMaxPercentStudentsBelowStudent = (id) =>{
+
+    let result = []
+    let percentList = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    
+    for(let key in percentList)
+    percentList[key] = percentageOfStudentsBelow(key,avg)
+
+    let percentValues = Object.values(percentList)
+    let subjects = Object.keys(percentList)
+    let max_value = Math.max(...percentValues)
+
+    for(let i =0; i < subjects.length ; i++)
+    max_value == percentValues[i] && result.push(subjects[i])
+
+    return result
+}
+
+export const subjectsMinPercentStudentsAboveStudent = (id) =>{
+
+    let result = []
+    let percentList = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    
+    for(let key in percentList)
+    percentList[key] = percentageOfStudentsAbove(key,avg)
+
+    let percentValues = Object.values(percentList)
+    let subjects = Object.keys(percentList)
+    let min_value = Math.min(...percentValues)
+
+    for(let i =0; i < subjects.length ; i++)
+    min_value == percentValues[i] && result.push(subjects[i])
+
+    return result
+}
+
+export const subjectsMinPercentStudentsBelowStudent = (id) =>{
+
+    let result = []
+    let percentList = fetchSubs()
+    let avg = averageMarkOfOne(id)
+    
+    for(let key in percentList)
+    percentList[key] = percentageOfStudentsBelow(key,avg)
+
+    let percentValues = Object.values(percentList)
+    let subjects = Object.keys(percentList)
+    let min_value = Math.min(...percentValues)
+
+    for(let i =0; i < subjects.length ; i++)
+    min_value == percentValues[i] && result.push(subjects[i])
+
+    return result
+}
+
+const percentOfStudentsScoringAboveAvgInTotal = () => {
+
+    let avg = averageofClass() / students[0].marks.length
+    let result = percentageOfStudentsAboveTotal(avg)
+
+    return result
+}
+
+const percentOfStudentsScoringBelowAvgInTotal = () => {
+
+    let avg = averageofClass() / students[0].marks.length
+    let result = percentageOfStudentsBelowTotal(avg)
+
+    return result
+}
+
+const percentOfStudentsScoringAboveAvgInEach = () => {
+
+    let subjectList = fetchSubs()
+    let avg = averageofClass() / students[0].marks.length
+
+    for(let key in subjectList)
+    subjectList[key] = percentageOfStudentsAbove(key,avg)
+
+    return subjectList
+}
+
+const percentOfStudentsScoringBelowAvgInEach = () => {
+
+    let subjectList = fetchSubs()
+    let avg = averageofClass() / students[0].marks.length
+
+    for(let key in subjectList)
+    subjectList[key] = percentageOfStudentsBelow(key,avg)
+
+    return (subjectList ? subjectList : "no result")
+}
+
+export const studentsScoringAboveClassAvgInAll = () =>{
+
+    let avg = averageofClass() / students[0].marks.length
+    let result = filterStudentsByMinScore(avg)
+    result = result.map(student => student.name)
+
+    return (result.length > 0 ? result : "no result")
+}
+
+export const studentsScoringBelowClassAvgInAll = () =>{
+
+    let avg = averageofClass() / students[0].marks.length
+    let result = filterStudentsByMaxScore(avg)
+    result = result.map(student => student.name)
+
+    return (result.length > 0 ? result : "no result")
+}
+
+// students scoring above the average class in most subject already done
+// students scoring below the average class in most subject already done
+
+export const subjectsAveragingAboveInMost = () =>{
+
+    let avg = averageofClass() / students[0].marks.length
+    let subjectList = fetchSubs()
+    let result = []
+
+    for(let key in subjectList)
+        subjectList[key] = percentageOfStudentsAbove(key,avg)
+
+    for(let key in subjectList)
+        subjectList[key] > 50 && result.push(key)
+    
+    return (result.length > 0 ? result : "no result")
+}
+
+export const subjectsAveragingBelowInMost = () =>{
+
+    let avg = averageofClass() / students[0].marks.length
+    let subjectList = fetchSubs()
+    let result = []
+
+    for(let key in subjectList)
+        subjectList[key] = percentageOfStudentsBelow(key,avg)
+
+    
+    for(let key in subjectList)
+        subjectList[key] > 50 && result.push(key)
+    
+    return (result.length > 0 ? result : "no result")
+}
+
+
+export const percentageOfStudentsAveragingAboveStudentInMost = (id) =>{
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    let majority_factor = students[0].marks.length / 2
+
+    students.forEach((student) => {
+
+        let res_array = student.marks.filter(detail => detail.mark > avg)
+        res_array.length > majority_factor &&  result.push(student.name)
+    })
+    return (result ? result : "no result")
+}
+
+export const percentageOfStudentsAveragingBelowStudentInMost = (id) =>{
+
+    let result = []
+    let avg = averageMarkOfOne(id)
+    let majority_factor = students[0].marks.length / 2
+
+    students.forEach((student) => {
+
+        let res_array = student.marks.filter(detail => detail.mark < avg)
+        res_array.length > majority_factor &&  result.push(student.name)
+    })
+    return (result ? result : "no result")
+}
+
+// 97 & 98 is same question as above and has already been done
+
+export const subjectWithHighestpercentAboveStudentAverage = (id) =>{
+
+    let avg = averageMarkOfOne(id)
+    let markList = fetchSubs()
+    let result = []
+    
+    for(let key in markList)
+    markList[key] = percentageOfStudentsAbove(key,avg)
+
+    let max_value = Math.max(...Object.values(markList))
+    for(let key in markList)
+    markList[key] == max_value && result.push(key)
+
+    return result
+}
+
+export const subjectWithHighestpercentBelowStudentAverage = (id) =>{
+
+    let avg = averageMarkOfOne(id)
+    let markList = fetchSubs()
+    let result = []
+    
+    for(let key in markList)
+    markList[key] = percentageOfStudentsBelow(key,avg)
+
+    let max_value = Math.max(...Object.values(markList))
+    for(let key in markList)
+    markList[key] == max_value && result.push(key)
+
+    return result
+}
+
 
 //////////////////////////////////////////////////////////////////
 // function calls
@@ -972,79 +1345,102 @@ export const studentsAveragingBelowInMost = () =>{
 
 
 export let easyQuestions =  [
-    {"question" : "print class name" , "answer" : printClassName()},
-    {"question" : "question2" , "answer" : printTeachersName()},
-    {"question" : "question2" , "answer" : printStudentIds("Mary")},
-    {"question" : "question2" , "answer" : printSubjectsOfOne("103")},
-    {"question" : "question2" , "answer" : printMarksOfOne("102")},
-    {"question" : "question2" , "answer" : averageMarkOfOne("101")},
-    {"question" : "question2" , "answer" : totalMarkOfOne("103")},
-    {"question" : "question2" , "answer" : averageMarkOfSubject('Computer')},
-    {"question" : "question2" , "answer" : totalMarkOfSubject("Computer")},
-    {"question" : "question2" , "answer" : topperOfSub("Physics")},
-    {"question" : "question2" , "answer" : bottomOfSub("Physics")},
-    {"question" : "question2" , "answer" : topper()},
-    {"question" : "question2" , "answer" : low_scorer()},
-    {"question" : "question2" , "answer" : subjectWithHighAvg()},
-    {"question" : "question2" , "answer" : subjectWithLowAvg()},
-    {"question" : "question2" , "answer" : averageofClass()},
-    {"question" : "question2" , "answer" : totalofClass()},
-    {"question" : "question2" , "answer" : averageOfEachSub},
-    {"question" : "question2" , "answer" : totalMarkOfSubs()},
-    {"question" : "question2" , "answer" : topperSubject()},
-    {"question" : "question2" , "answer" : lowerSubject()},
-    {"question" : "question2" , "answer" : toppersByAvg()},
-    {"question" : "question2" , "answer" : lowersByAvg()},
-    {"question" : "question2" , "answer" : toppers()},
-    {"question" : "question2" , "answer" : lowers()},
+    {"question" : "Write a function to print the name of the class","answer" : printClassName()},
+    {"question" : "Write a function to print the teacher's name:" , "answer" : printTeachersName()},
+    {"question" : "Write a function to print the names of all the students in the class" , "answer" : printStudentsNames()},
+    {"question" : "Write a function to print the IDs of all the students in the class." , "answer" : printStudentIds()},
+    {"question" : "Write a function to print the subject names for a specific student" , "answer" : printSubjectsOfOne("103")},
+    {"question" : "Write a function to print the marks of a specific student in all subjects." , "answer" : printMarksOfOne("102")},
+    {"question" : "Write a function to calculate and print the average marks for a specific student" , "answer" : averageMarkOfOne("101")},
+    {"question" : "Write a function to calculate and print the total marks for a specific student." , "answer" : totalMarkOfOne("103")},
+    {"question" : "Write a function to calculate and print the average marks for all students in a specific subject." , "answer" : averageMarkOfSubject('Computer')},
+    {"question" : "Write a function to calculate and print the total marks for all students in a specific subject" , "answer" : totalMarkOfSubject("Computer")},
+    {"question" : "Write a function to find and print the student with the highest marks in a specific subject" , "answer" : topperOfSub("Physics")},
+    {"question" : "Write a function to find and print the student with the lowest marks in a specific subject." , "answer" : bottomOfSub("Physics")},
+    {"question" : "Write a function to find and print the student with the highest total marks." , "answer" : topper()},
+    {"question" : "Write a function to find and print the student with the lowest total marks." , "answer" : low_scorer()},
+    {"question" : "Write a function to find and print the subject with the highest average marks." , "answer" : subjectWithHighAvg()},
+    {"question" : "Write a function to find and print the subject with the lowest average marks." , "answer" : subjectWithLowAvg()},
+    {"question" : "Write a function to calculate and print the overall average marks for the class." , "answer" : averageofClass()},
+    {"question" : "Write a function to calculate and print the overall total marks for the class." , "answer" : totalofClass()},
+    {"question" : "Write a function to calculate and print the average marks for each subject" , "answer" : averageOfEachSub()}, //
+    {"question" : "Write a function to calculate and print the total marks for each subject" , "answer" : totalMarkOfSubs()},
+    {"question" : "Write a function to find and print the subject with the highest total marks." , "answer" : topperSubject()},
+    {"question" : "Write a function to find and print the subject with the lowest total marks" , "answer" : lowerSubject()},
+    {"question" : "Write a function to find and print the student(s) with the highest average marks." , "answer" : toppersByAvg()},
+    {"question" : "Write a function to find and print the student(s) with the lowest average marks." , "answer" : lowersByAvg()},
+    {"question" : "Write a function to find and print the student(s) with the highest total marks." , "answer" : toppers()},
+    {"question" : "Write a function to find and print the student(s) with the lowest total marks." , "answer" : lowers()},
     ]
 
     export let mediumQuestions = [
-    {"question" : "print class name" , "answer" : filterStudentsMinLimit(30,"English")},
-    {"question" : "question2" , "answer" : filterStudentsMaxLimit(30,"English")},
-    {"question" : "question2" , "answer" : filterStudentsByLowerLimit(30)},
-    {"question" : "question2" , "answer" : filterStudentsByUpperLimit(45)},
-    {"question" : "question2" , "answer" : percentageOfStudentsAbove("English",30)},
-    {"question" : "question2" , "answer" : percentageOfStudentsBelow("English",30)},
-    {"question" : "question2" , "answer" : percentageOfStudentsAboveTotal(30)},
-    {"question" : "question2" , "answer" : percentageOfStudentsBelowTotal(40)},
-    {"question" : "question2" , "answer" : studentsWithHighPercent()},
-    {"question" : "question2" , "answer" : studentsWithLowPercent()},
-    {"question" : "question2" , "answer" : subjectsWithHighestPercent()},
-    {"question" : "question2" , "answer" : subjectsWithLowestPercent()},
-    {"question" : "question2" , "answer" : studentsWithHighestPercentIn("Maths")},
-    {"question" : "question2" , "answer" : studentsWithLowestPercentIn("Maths")},   //
-    {"question" : "question2" , "answer" : topScoresOfEachSub()},
-    {"question" : "question2" , "answer" : lowScoresOfEachSub},
-    {"question" : "question2" , "answer" : topScorersOfEachSub()},
-    {"question" : "question2" , "answer" : lowScorersOfEachSub()},
-    {"question" : "question2" , "answer" : totalMarkOfSubs()},
-    {"question" : "question2" , "answer" : toppersOfSubs()},
-    {"question" : "question2" , "answer" : lowersOfSubs()},
-    {"question" : "question2" , "answer" : subjectsWithHighestScores()},
-    {"question" : "question2" , "answer" : subjectsWithLowestScores()},
-    {"question" : "question2" , "answer" : studentsScoringAboveAverage()},
-    {"question" : "question2" , "answer" : studentsScoringBelowAverage()},
+    {"question" : "Write a function to calculate and print the number of students who scored above a certain mark in a specific subject." , "answer" : filterStudentsMinLimit(30,"English")},
+    {"question" : "Write a function to calculate and print the number of students who scored below a certain mark in a specific subject." , "answer" : filterStudentsMaxLimit(30,"English")},
+    {"question" : "Write a function to calculate and print the number of students who scored above a certain mark in all subjects." , "answer" : filterStudentsByLowerLimit(30)},
+    {"question" : "Write a function to calculate and print the number of students who scored below a certain mark in all subjects." , "answer" : filterStudentsByUpperLimit(45)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above a certain mark in a specific subject." , "answer" : percentageOfStudentsAbove("English",30)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below a certain mark in a specific subject." , "answer" : percentageOfStudentsBelow("English",30)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above a certain mark in all subjects." , "answer" : percentageOfStudentsAboveTotal(30)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below a certain mark in all subjects." , "answer" : percentageOfStudentsBelowTotal(40)},
+    {"question" : "Write a function to find and print the student(s) with the highest percentage of marks." , "answer" : studentsWithHighPercent()},
+    {"question" : "Write a function to find and print the student(s) with the lowest percentage of marks." , "answer" : studentsWithLowPercent()},
+    {"question" : "Write a function to find and print the subject(s) with the highest percentage of marks." , "answer" : subjectsWithHighestPercent()},
+    {"question" : "Write a function to find and print the subject(s) with the lowest percentage of marks." , "answer" : subjectsWithLowestPercent()},
+    {"question" : "Write a function to find and print the student(s) with the highest percentage of marks in a specific subject." , "answer" : studentsWithHighestPercentIn("Maths")},
+    {"question" : "Write a function to find and print the student(s) with the lowest percentage of marks in a specific subject." , "answer" : studentsWithLowestPercentIn("Maths")},
+    {"question" : "Write a function to find and print the student(s) who scored the highest marks in at least one subject." , "answer" : topScorersOfEachSub()},
+    {"question" : "Write a function to find and print the student(s) who scored the lowest marks in at least one subject." , "answer" : lowScorersOfEachSub()},
+    {"question" : "Write a function to find and print subjects which has highest scores" , "answer" : subjectsWithHighestScores()},
+    {"question" : "Write a function to find and print subjects which has lowest score" , "answer" : subjectsWithLowestScores()},
+    {"question" : "Write a function to find and print subjects scoring above average" , "answer" : studentsScoringAboveAverage()},
+    {"question" : "Write a function to find and print students scoring below average" , "answer" : studentsScoringBelowAverage()},
     ]
-
+// 41 yet to find
     export let hardQuestions = [
-    {"question" : "print class name" , "answer" : subjectsAboveAverage()},
-    {"question" : "print class name" , "answer" : subjectsBelowAverage()},
-    {"question" : "print class name" , "answer" : subWithStudentsAbove(20)},
-    {"question" : "print class name" , "answer" : subWithStudentsBelow(30)},
-    {"question" : "print class name" , "answer" : leastSubWithStudentsAbove(30)},
-    {"question" : "print class name" , "answer" : leastSubWithStudentsBelow(30)},
-    {"question" : "print class name" , "answer" : percentOfStudentsAboveAverage()},
-    {"question" : "print class name" , "answer" : percentOfStudentsBelowAverage()},
-    {"question" : "print class name" , "answer" : studentsAveragingAboveInMost()},
-    {"question" : "print class name" , "answer" : studentsAveragingBelowInMost()},
+    {"question" : "Write a function to find and print subjects scoring above average" , "answer" : subjectsAboveAverage()},
+    {"question" : "Write a function to find and print subjects scoring below average" , "answer" : subjectsBelowAverage()},
+    {"question" : "Write a function to find and print the subject(s) in which all students scored above a certain mark." , "answer" : subWithStudentsAbove(20)},
+    {"question" : "Write a function to find and print the subject(s) in which all students scored below a certain mark." , "answer" : subWithStudentsBelow(30)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above the class average marks in at least one subject." , "answer" : leastSubWithStudentsAbove(30)},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below the class average marks in at least one subject." , "answer" : leastSubWithStudentsBelow(30)},
+    {"question" : "Write a function to find and print the student(s) who scored above the class average marks in all subjects." , "answer" : percentOfStudentsAboveAverage()},
+    {"question" : "Write a function to find and print the student(s) who scored below the class average marks in all subjects." , "answer" : percentOfStudentsBelowAverage()},
+    {"question" : "Write a function to find and print the student(s) who scored above the class average marks in the majority of subjects." , "answer" : studentsAveragingAboveInMost()},
+    {"question" : "Write a function to find and print the student(s) who scored below the class average marks in the majority of subjects." , "answer" : studentsAveragingBelowInMost()},
+    {"question" : "Write a function to find and print the subject(s) in which the majority of students scored above the class average marks." , "answer" : subjectsAveragingAboveClass()},
+    {"question" : "Write a function to find and print the subject(s) in which the majority of students scored below the class average marks." , "answer" : subjectsAveragingBelowClass()},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above the average marks of a specific student in at least one subject." , "answer" : studentsAboveStudentInEach("104")},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below the average marks of a specific student in at least one subject" , "answer" : studentssBelowStudentInEach("102")},
+    {"question" : "Write a function to find and print the student(s) who scored above the average marks of a specific student in all subjects." , "answer" : studentsAboveStudentInAll("102")},
+    {"question" : "Write a function to find and print the student(s) who scored below the average marks of a specific student in all subjects." , "answer" : studentsBelowStudentInAll("104")},
+    {"question" : "Write a function to find and print the student(s) who scored above the average marks of a specific student in all subjects." , "answer" : studentsAveragingAbove("101")},
+    {"question" : "Write a function to find and print the student(s) who scored below the average marks of a specific student in all subjects." , "answer" : studentsAveragingBelow("101")},
+    {"question" : "Write a function to find and print the subject(s) in which the average marks are above the average marks of a specific student" , "answer" : subjectsAveragingAboveStudent("101")},
+    {"question" : "Write a function to find and print the subject(s) in which the average marks are below the average marks of a specific student." , "answer" : subjectsAveragingBelowStudent("103")},
+
 ]
 
 export let toughQuestions = [
-    {"question" : "print class name" , "answer" : highestPercentageOf("102")},
-    {"question" : "print class name" , "answer" : lowestPercentageOf("102")},
-    {"question" : "print class name" , "answer" : subjectsScoredAbove(18)},
-    {"question" : "print class name" , "answer" : subjectsScoredBelow(50)},
-    {"question" : "print class name" , "answer" : averageMarksOfSubsAbove(35)},
-    {"question" : "print class name" , "answer" : averageMarksOfSubsBelow(35)},
+    {"question" : "Write a function to find and print the subject(s) with the highest percentage of marks for a specific student" , "answer" : highestPercentageOf("102")},
+    {"question" : "Write a function to find and print the subject(s) with the lowest percentage of marks for a specific student." , "answer" : lowestPercentageOf("102")},
+    {"question" : "Write a function to find and print the subject(s) in which all students scored above a certain mark." , "answer" : subjectsScoredAbove(18)},
+    {"question" : "Write a function to find and print the subject(s) in which all students scored below a certain mark." , "answer" : subjectsScoredBelow(50)},
+    {"question" : "Write a function to find and print the subject(s) in which the average marks of all students are above a certain mark." , "answer" : averageMarksOfSubsAbove(35)},
+    {"question" : "Write a function to find and print the subject(s) in which the average marks of all students are below a certain mark." , "answer" : averageMarksOfSubsBelow(35)},
+    {"question" : "Write a function to find and print the subject(s) in which the highest percentage of students scored above the average marks of a specific student." , "answer" : subjectsMaxPercentStudentsAboveStudent("102")},
+    {"question" : "Write a function to find and print the subject(s) in which the highest percentage of students scored below the average marks of a specific student." , "answer" : subjectsMaxPercentStudentsBelowStudent("102")},
+    {"question" : "Write a function to find and print the subject(s) in which the lowest percentage of students scored above the average marks of a specific student." , "answer" : subjectsMinPercentStudentsAboveStudent("102")},
+    {"question" : "Write a function to find and print the subject(s) in which the lowest percentage of students scored below the average marks of a specific student." , "answer" : subjectsMinPercentStudentsBelowStudent("103")},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above the average marks of the class in each subject." , "answer" : percentOfStudentsScoringAboveAvgInTotal()},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below the average marks of the class in each subject." , "answer" : percentOfStudentsScoringBelowAvgInTotal()},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above the average marks of the class in at least one subject" , "answer" : percentOfStudentsScoringAboveAvgInEach()},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below the average marks of the class in at least one subject. ", "answer" : percentOfStudentsScoringBelowAvgInEach()},
+    {"question" : "Write a function to find and print the student(s) who scored above the average marks of the class in all subjects." , "answer" : studentsScoringAboveClassAvgInAll()},
+    {"question" : "Write a function to find and print the student(s) who scored below the average marks of the class in all subjects." , "answer" : studentsScoringBelowClassAvgInAll()},
+    {"question" : "Write a function to find and print the subject(s) in which the majority of students scored above the average marks of the class" , "answer" : subjectsAveragingAboveInMost()},
+    {"question" : "Write a function to find and print the subject(s) in which the majority of students scored below the average marks of the class." , "answer" : subjectsAveragingBelowInMost()},
+    {"question" : "Write a function to calculate and print the percentage of students who scored above the average marks of a specific student in the majority of subjects" , "answer" : percentageOfStudentsAveragingAboveStudentInMost("101")},
+    {"question" : "Write a function to calculate and print the percentage of students who scored below the average marks of a specific student in the majority of subjects" , "answer" : percentageOfStudentsAveragingBelowStudentInMost("102")},
+    {"question" : "Write a function to find and print the subject(s) in which the highest percentage of students scored above the average marks of a specific student." , "answer" : subjectWithHighestpercentAboveStudentAverage("102")},
+    {"question" : "Write a function to find and print the subject(s) in which the highest percentage of students scored below the average marks of a specific student." , "answer" : subjectWithHighestpercentBelowStudentAverage("104")},
 ]
